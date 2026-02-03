@@ -14,7 +14,7 @@ export class SSHManagerTreeDataProvider implements vscode.TreeDataProvider<TreeI
     private configParser: ConfigParser,
     private knownHostsManager: KnownHostsManager,
     private agentManager: SSHAgentManager
-  ) {}
+  ) { }
 
   refresh(): void {
     this._onDidChangeTreeData.fire(undefined);
@@ -101,7 +101,8 @@ export class SSHManagerTreeDataProvider implements vscode.TreeDataProvider<TreeI
       item.description = key.type.toUpperCase();
       item.iconPath = new vscode.ThemeIcon(key.hasPassphrase ? 'lock' : 'key');
       item.tooltip = `Type: ${key.type}\nFingerprint: ${key.fingerprint || 'N/A'}\nComment: ${key.comment || 'N/A'}`;
-      item.contextValue = key.path;
+      item.contextValue = 'ssh-key';
+      item.resourceData = key.path;
       return item;
     });
   }
@@ -118,7 +119,8 @@ export class SSHManagerTreeDataProvider implements vscode.TreeDataProvider<TreeI
       item.description = details || 'No details';
       item.iconPath = new vscode.ThemeIcon('server');
       item.tooltip = `Name: ${host.name}\nHostName: ${host.hostName || 'N/A'}\nUser: ${host.user || 'N/A'}\nPort: ${host.port || 22}`;
-      item.contextValue = host.name;
+      item.contextValue = 'ssh-host';
+      item.resourceData = host.name;
       return item;
     });
   }
@@ -126,8 +128,8 @@ export class SSHManagerTreeDataProvider implements vscode.TreeDataProvider<TreeI
   private getKnownHostItems(): TreeItem[] {
     const entries = this.knownHostsManager.parseKnownHosts();
     return entries.map(entry => {
-      const displayName = entry.hashed 
-        ? `hashed (${entry.host.substring(0, 20)}...)` 
+      const displayName = entry.hashed
+        ? `hashed (${entry.host.substring(0, 20)}...)`
         : entry.host;
       const item = new TreeItem(
         displayName,
@@ -136,7 +138,8 @@ export class SSHManagerTreeDataProvider implements vscode.TreeDataProvider<TreeI
       );
       item.description = entry.keyType;
       item.iconPath = new vscode.ThemeIcon('globe');
-      item.contextValue = entry.lineNumber.toString();
+      item.contextValue = 'known-host';
+      item.resourceData = entry.lineNumber.toString();
       return item;
     });
   }

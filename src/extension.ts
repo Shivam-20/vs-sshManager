@@ -109,7 +109,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   const copyPublicKeyCmd = vscode.commands.registerCommand('sshManager.copyPublicKey', async (item: TreeItem) => {
-    const keyPath = item.contextValue;
+    const keyPath = item.resourceData;
     if (!keyPath) return;
 
     const publicKey = keyManager.exportPublicKey(keyPath);
@@ -123,7 +123,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   const deleteKeyCmd = vscode.commands.registerCommand('sshManager.deleteKey', async (item: TreeItem) => {
-    const keyPath = item.contextValue;
+    const keyPath = item.resourceData;
     if (!keyPath) return;
 
     const confirm = await vscode.window.showWarningMessage(
@@ -139,7 +139,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   const editHostCmd = vscode.commands.registerCommand('sshManager.editHost', async (item: TreeItem) => {
-    const hostName = item.contextValue;
+    const hostName = item.resourceData;
     if (!hostName) return;
 
     const hosts = await configParser.parseConfig();
@@ -178,7 +178,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   const deleteHostCmd = vscode.commands.registerCommand('sshManager.deleteHost', async (item: TreeItem) => {
-    const hostName = item.contextValue;
+    const hostName = item.resourceData;
     if (!hostName) return;
 
     const confirm = await vscode.window.showWarningMessage(
@@ -194,7 +194,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   const removeKnownHostCmd = vscode.commands.registerCommand('sshManager.removeKnownHost', async (item: TreeItem) => {
-    const lineNumber = parseInt(item.contextValue || '0');
+    const lineNumber = parseInt(item.resourceData || '0');
     if (!lineNumber) return;
 
     const confirm = await vscode.window.showWarningMessage(
@@ -210,7 +210,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   const copySshCommandCmd = vscode.commands.registerCommand('sshManager.copySshCommand', async (item: TreeItem) => {
-    const selectedHost = item.contextValue;
+    const selectedHost = item.resourceData;
     if (!selectedHost) return;
 
     const hosts = await configParser.parseConfig();
@@ -231,7 +231,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   const testConnectionCmd = vscode.commands.registerCommand('sshManager.testConnection', async (item: TreeItem) => {
-    const selectedHost = item.contextValue;
+    const selectedHost = item.resourceData;
     if (!selectedHost) return;
 
     const hosts = await configParser.parseConfig();
@@ -251,19 +251,19 @@ export function activate(context: vscode.ExtensionContext) {
         const hostAddress = host.hostName || 'localhost';
         const port = host.port || 22;
         const command = `ssh -o ConnectTimeout=5 ${user}@${hostAddress} -p ${port} echo 'Connection successful' 2>&1`;
-        
+
         const { exec } = await import('child_process');
         const { promisify } = await import('util');
         const execAsync = promisify(exec);
-        
+
         await execAsync(command, { timeout: 10000 });
-        
+
         return true;
       } catch (error: any) {
         const errorMessage = error.stderr || error.message || 'Unknown error';
-        
+
         let suggestions: string[] = [];
-        
+
         if (errorMessage.includes('Connection refused')) {
           suggestions.push('Check if SSH server is running');
           suggestions.push('Verify firewall allows SSH connections');
@@ -277,17 +277,17 @@ export function activate(context: vscode.ExtensionContext) {
           suggestions.push('Check hostname spelling');
           suggestions.push('Verify DNS resolution');
         }
-        
-        const fullMessage = `Connection failed: ${errorMessage}` + 
+
+        const fullMessage = `Connection failed: ${errorMessage}` +
           (suggestions.length ? `\n\nSuggestions:\n• ${suggestions.join('\n• ')}` : '');
-        
+
         throw new Error(fullMessage);
       }
     });
   });
 
   const openTerminalCmd = vscode.commands.registerCommand('sshManager.openTerminal', async (item: TreeItem) => {
-    const selectedHost = item.contextValue;
+    const selectedHost = item.resourceData;
     if (!selectedHost) return;
 
     const hosts = await configParser.parseConfig();
@@ -308,7 +308,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   const viewPublicKeyCmd = vscode.commands.registerCommand('sshManager.viewPublicKey', async (item: TreeItem) => {
-    const keyPath = item.contextValue;
+    const keyPath = item.resourceData;
     if (!keyPath) return;
 
     const publicKey = keyManager.exportPublicKey(keyPath);
@@ -327,7 +327,7 @@ export function activate(context: vscode.ExtensionContext) {
   const openSshFolderCmd = vscode.commands.registerCommand('sshManager.openSshFolder', async () => {
     const sshPath = vscode.workspace.getConfiguration('sshManager').get('sshPath') as string || '~/.ssh';
     const expandedPath = sshPath.replace(/^~/, process.env.HOME || '');
-    
+
     if (!require('fs').existsSync(expandedPath)) {
       vscode.window.showErrorMessage(`SSH directory not found: ${sshPath}`);
       return;
@@ -341,7 +341,7 @@ export function activate(context: vscode.ExtensionContext) {
     const sshPath = vscode.workspace.getConfiguration('sshManager').get('sshPath') as string || '~/.ssh';
     const expandedPath = sshPath.replace(/^~/, process.env.HOME || '');
     const configPath = require('path').join(expandedPath, 'config');
-    
+
     if (!require('fs').existsSync(configPath)) {
       vscode.window.showWarningMessage('Config file not found. It will be created when you add a host.');
       return;
@@ -352,7 +352,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   const changePassphraseCmd = vscode.commands.registerCommand('sshManager.changePassphrase', async (item: TreeItem) => {
-    const keyPath = item.contextValue;
+    const keyPath = item.resourceData;
     if (!keyPath) return;
 
     const { exec } = await import('child_process');
@@ -377,7 +377,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   const removePassphraseCmd = vscode.commands.registerCommand('sshManager.removePassphrase', async (item: TreeItem) => {
-    const keyPath = item.contextValue;
+    const keyPath = item.resourceData;
     if (!keyPath) return;
 
     const { exec } = await import('child_process');
@@ -413,4 +413,4 @@ export function activate(context: vscode.ExtensionContext) {
   );
 }
 
-export function deactivate() {}
+export function deactivate() { }

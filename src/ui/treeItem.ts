@@ -8,6 +8,7 @@ export class TreeItem extends vscode.TreeItem {
   type: string;
   contextValue?: string;
   viewItem: string;
+  resourceData?: string;
 
   constructor(
     label: string,
