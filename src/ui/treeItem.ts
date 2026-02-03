@@ -7,6 +7,7 @@ function generateUniqueId(): string {
 export class TreeItem extends vscode.TreeItem {
   type: string;
   contextValue?: string;
+  viewItem: string;
 
   constructor(
     label: string,
@@ -16,5 +17,6 @@ export class TreeItem extends vscode.TreeItem {
     super(label, collapsibleState);
     this.type = type;
     this.id = `${type}-${generateUniqueId()}`;
+    this.viewItem = type;
   }
 }

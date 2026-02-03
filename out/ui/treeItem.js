@@ -43,6 +43,7 @@ class TreeItem extends vscode.TreeItem {
         super(label, collapsibleState);
         this.type = type;
         this.id = `${type}-${generateUniqueId()}`;
+        this.viewItem = type;
     }
 }
 exports.TreeItem = TreeItem;
