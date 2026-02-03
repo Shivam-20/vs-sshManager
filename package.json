@@ -1,0 +1,199 @@
+{
+  "name": "ssh-manager",
+  "displayName": "SSH Manager",
+  "description": "Manage SSH keys, config, known hosts, and agent",
+  "version": "1.0.0",
+  "publisher": "tryToDEv",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "ssh-manager-explorer",
+          "title": "SSH Manager",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "ssh-manager-explorer": [
+        {
+          "id": "sshManagerView",
+          "name": "SSH Manager"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "sshManager.refresh",
+        "title": "Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "sshManager.generateKey",
+        "title": "Generate SSH Key",
+        "icon": "$(add)"
+      },
+      {
+        "command": "sshManager.addHost",
+        "title": "Add SSH Host",
+        "icon": "$(add)"
+      },
+      {
+        "command": "sshManager.copyPublicKey",
+        "title": "Copy Public Key"
+      },
+      {
+        "command": "sshManager.deleteKey",
+        "title": "Delete Key"
+      },
+      {
+        "command": "sshManager.editHost",
+        "title": "Edit Host"
+      },
+      {
+        "command": "sshManager.deleteHost",
+        "title": "Delete Host"
+      },
+      {
+        "command": "sshManager.removeKnownHost",
+        "title": "Remove Entry"
+      },
+      {
+        "command": "sshManager.viewPublicKey",
+        "title": "View Public Key"
+      },
+      {
+        "command": "sshManager.copySshCommand",
+        "title": "Copy SSH Command"
+      },
+      {
+        "command": "sshManager.testConnection",
+        "title": "Test Connection"
+      },
+      {
+        "command": "sshManager.openSshFolder",
+        "title": "Open SSH Folder"
+      },
+      {
+        "command": "sshManager.openConfigFile",
+        "title": "Open Config File"
+      },
+      {
+        "command": "sshManager.changePassphrase",
+        "title": "Change Passphrase"
+      },
+      {
+        "command": "sshManager.removePassphrase",
+        "title": "Remove Passphrase"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "sshManager.refresh",
+          "when": "view == sshManagerView",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "sshManager.generateKey",
+          "when": "view == sshManagerView && viewItem == keys-folder",
+          "group": "inline@1"
+        },
+        {
+          "command": "sshManager.addHost",
+          "when": "view == sshManagerView && viewItem == config-folder",
+          "group": "inline@1"
+        },
+        {
+          "command": "sshManager.copyPublicKey",
+          "when": "view == sshManagerView && viewItem == ssh-key",
+          "group": "1_actions@1"
+        },
+        {
+          "command": "sshManager.viewPublicKey",
+          "when": "view == sshManagerView && viewItem == ssh-key",
+          "group": "1_actions@2"
+        },
+        {
+          "command": "sshManager.deleteKey",
+          "when": "view == sshManagerView && viewItem == ssh-key",
+          "group": "2_modify@1"
+        },
+        {
+          "command": "sshManager.changePassphrase",
+          "when": "view == sshManagerView && viewItem == ssh-key",
+          "group": "2_modify@2"
+        },
+        {
+          "command": "sshManager.removePassphrase",
+          "when": "view == sshManagerView && viewItem == ssh-key",
+          "group": "2_modify@3"
+        },
+        {
+          "command": "sshManager.editHost",
+          "when": "view == sshManagerView && viewItem == ssh-host",
+          "group": "1_modify@1"
+        },
+        {
+          "command": "sshManager.copySshCommand",
+          "when": "view == sshManagerView && viewItem == ssh-host",
+          "group": "1_actions@1"
+        },
+        {
+          "command": "sshManager.testConnection",
+          "when": "view == sshManagerView && viewItem == ssh-host",
+          "group": "1_actions@2"
+        },
+        {
+          "command": "sshManager.deleteHost",
+          "when": "view == sshManagerView && viewItem == ssh-host",
+          "group": "2_modify@2"
+        },
+        {
+          "command": "sshManager.openTerminal",
+          "when": "view == sshManagerView && viewItem == ssh-host",
+          "group": "1_actions@3"
+        },
+        {
+          "command": "sshManager.removeKnownHost",
+          "when": "view == sshManagerView && viewItem == known-host",
+          "group": "1_modify@1"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "SSH Manager",
+      "properties": {
+        "sshManager.sshPath": {
+          "type": "string",
+          "default": "~/.ssh",
+          "description": "Path to SSH directory"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^18.x",
+    "@types/vscode": "^1.75.0",
+    "@vscode/vsce": "^3.7.1",
+    "typescript": "^5.x"
+  }
+}
