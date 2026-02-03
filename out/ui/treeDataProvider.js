@@ -99,7 +99,8 @@ class SSHManagerTreeDataProvider {
             item.description = key.type.toUpperCase();
             item.iconPath = new vscode.ThemeIcon(key.hasPassphrase ? 'lock' : 'key');
             item.tooltip = `Type: ${key.type}\nFingerprint: ${key.fingerprint || 'N/A'}\nComment: ${key.comment || 'N/A'}`;
-            item.contextValue = key.path;
+            item.contextValue = 'ssh-key';
+            item.resourceData = key.path;
             return item;
         });
     }
@@ -111,7 +112,8 @@ class SSHManagerTreeDataProvider {
             item.description = details || 'No details';
             item.iconPath = new vscode.ThemeIcon('server');
             item.tooltip = `Name: ${host.name}\nHostName: ${host.hostName || 'N/A'}\nUser: ${host.user || 'N/A'}\nPort: ${host.port || 22}`;
-            item.contextValue = host.name;
+            item.contextValue = 'ssh-host';
+            item.resourceData = host.name;
             return item;
         });
     }
@@ -124,7 +126,8 @@ class SSHManagerTreeDataProvider {
             const item = new treeItem_1.TreeItem(displayName, vscode.TreeItemCollapsibleState.None, 'known-host');
             item.description = entry.keyType;
             item.iconPath = new vscode.ThemeIcon('globe');
-            item.contextValue = entry.lineNumber.toString();
+            item.contextValue = 'known-host';
+            item.resourceData = entry.lineNumber.toString();
             return item;
         });
     }

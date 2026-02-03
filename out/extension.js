@@ -127,7 +127,7 @@ function activate(context) {
         vscode.window.showInformationMessage(`Host '${name}' added`);
     });
     const copyPublicKeyCmd = vscode.commands.registerCommand('sshManager.copyPublicKey', async (item) => {
-        const keyPath = item.contextValue;
+        const keyPath = item.resourceData;
         if (!keyPath)
             return;
         const publicKey = keyManager.exportPublicKey(keyPath);
@@ -139,7 +139,7 @@ function activate(context) {
         vscode.window.showInformationMessage('Public key copied to clipboard');
     });
     const deleteKeyCmd = vscode.commands.registerCommand('sshManager.deleteKey', async (item) => {
-        const keyPath = item.contextValue;
+        const keyPath = item.resourceData;
         if (!keyPath)
             return;
         const confirm = await vscode.window.showWarningMessage(`Delete key '${item.label}'?`, { modal: true }, 'Delete');
@@ -150,7 +150,7 @@ function activate(context) {
         vscode.window.showInformationMessage('Key deleted');
     });
     const editHostCmd = vscode.commands.registerCommand('sshManager.editHost', async (item) => {
-        const hostName = item.contextValue;
+        const hostName = item.resourceData;
         if (!hostName)
             return;
         const hosts = await configParser.parseConfig();
@@ -187,7 +187,7 @@ function activate(context) {
         vscode.window.showInformationMessage(`Host '${hostName}' updated`);
     });
     const deleteHostCmd = vscode.commands.registerCommand('sshManager.deleteHost', async (item) => {
-        const hostName = item.contextValue;
+        const hostName = item.resourceData;
         if (!hostName)
             return;
         const confirm = await vscode.window.showWarningMessage(`Delete host '${hostName}'?`, { modal: true }, 'Delete');
@@ -198,7 +198,7 @@ function activate(context) {
         vscode.window.showInformationMessage(`Host '${hostName}' deleted`);
     });
     const removeKnownHostCmd = vscode.commands.registerCommand('sshManager.removeKnownHost', async (item) => {
-        const lineNumber = parseInt(item.contextValue || '0');
+        const lineNumber = parseInt(item.resourceData || '0');
         if (!lineNumber)
             return;
         const confirm = await vscode.window.showWarningMessage(`Remove this known host entry?`, { modal: true }, 'Remove');
@@ -209,7 +209,7 @@ function activate(context) {
         vscode.window.showInformationMessage('Known host entry removed');
     });
     const copySshCommandCmd = vscode.commands.registerCommand('sshManager.copySshCommand', async (item) => {
-        const selectedHost = item.contextValue;
+        const selectedHost = item.resourceData;
         if (!selectedHost)
             return;
         const hosts = await configParser.parseConfig();
@@ -227,7 +227,7 @@ function activate(context) {
         vscode.window.showInformationMessage('SSH command copied to clipboard');
     });
     const testConnectionCmd = vscode.commands.registerCommand('sshManager.testConnection', async (item) => {
-        const selectedHost = item.contextValue;
+        const selectedHost = item.resourceData;
         if (!selectedHost)
             return;
         const hosts = await configParser.parseConfig();
@@ -278,7 +278,7 @@ function activate(context) {
         });
     });
     const openTerminalCmd = vscode.commands.registerCommand('sshManager.openTerminal', async (item) => {
-        const selectedHost = item.contextValue;
+        const selectedHost = item.resourceData;
         if (!selectedHost)
             return;
         const hosts = await configParser.parseConfig();
@@ -296,7 +296,7 @@ function activate(context) {
         terminal.show();
     });
     const viewPublicKeyCmd = vscode.commands.registerCommand('sshManager.viewPublicKey', async (item) => {
-        const keyPath = item.contextValue;
+        const keyPath = item.resourceData;
         if (!keyPath)
             return;
         const publicKey = keyManager.exportPublicKey(keyPath);
@@ -332,7 +332,7 @@ function activate(context) {
         await vscode.window.showTextDocument(uri);
     });
     const changePassphraseCmd = vscode.commands.registerCommand('sshManager.changePassphrase', async (item) => {
-        const keyPath = item.contextValue;
+        const keyPath = item.resourceData;
         if (!keyPath)
             return;
         const { exec } = await Promise.resolve().then(() => __importStar(require('child_process')));
@@ -355,7 +355,7 @@ function activate(context) {
         }
     });
     const removePassphraseCmd = vscode.commands.registerCommand('sshManager.removePassphrase', async (item) => {
-        const keyPath = item.contextValue;
+        const keyPath = item.resourceData;
         if (!keyPath)
             return;
         const { exec } = await Promise.resolve().then(() => __importStar(require('child_process')));

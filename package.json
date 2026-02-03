@@ -1,8 +1,8 @@
 {
-  "name": "ssh-manager",
-  "displayName": "SSH Manager",
+  "name": "ssh-manager-pro",
+  "displayName": "SSH Manager Pro",
   "description": "Manage SSH keys, config, known hosts, and agent",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "publisher": "tryToDEv",
   "engines": {
     "vscode": "^1.75.0"
